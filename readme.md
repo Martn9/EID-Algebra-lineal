@@ -1,45 +1,63 @@
-# Visualización y Reducción Dimensional de Datos utilizando PCA
+# Organización Detallada del Equipo y Tareas Críticas
 
-**Curso:** Álgebra Lineal para la Computación  
-**Institución:** Universidad Católica de Temuco  
-**Fecha de Entrega:** 23 de junio de 2026  
+Este documento establece las responsabilidades exactas de cada integrante para el proyecto "Visualización y Reducción Dimensional de Datos utilizando PCA". Es obligatorio que cada miembro lea y comprenda no solo su parte, sino la lógica general del trabajo, ya que la rúbrica indica que **las preguntas en la presentación se realizarán de manera aleatoria a cualquier integrante**.
 
-## Descripción del Proyecto
-Este proyecto de investigación y desarrollo implementa el algoritmo de Análisis de Componentes Principales (PCA) mediante álgebra lineal pura (sin el uso de librerías de automatización como `scikit-learn`). 
+---
 
-El objetivo de la aplicación computacional es proyectar y reducir la dimensionalidad de un conjunto de datos deportivos hiperdimensional para predecir matemáticamente la probabilidad de éxito de las selecciones de fútbol en la **Copa del Mundo 2026**.
+## 1. Bastián Liempi: Especialista Teórico y Fundamentos
 
-## Organización del Equipo y Roles
+**Responsabilidad Principal:** Demostrar el dominio matemático del Análisis de Componentes Principales (PCA) mediante la redacción del Marco Teórico y la validación manual del algoritmo.
 
-El trabajo fue dividido estratégicamente en cuatro módulos de desarrollo para cubrir todos los criterios de evaluación (Fundamentos matemáticos, Implementación computacional, Análisis experimental y Organización):
+**Tareas Específicas:**
+* **Redacción Teórica (LaTeX):** Debes escribir la sección del informe que explica qué es una matriz de covarianza, qué representan geométricamente los autovalores (magnitud de la varianza) y los autovectores (dirección de los nuevos ejes).
+* **Desarrollo del script `ejemplo_manual.py`:** Debes crear un script en Python independiente que tome una matriz pequeña inventada (ejemplo: 3 filas por 2 columnas) y calcule el PCA paso a paso. Este script debe imprimir en consola la matriz centrada, la matriz de covarianza y los autovectores resultantes.
 
-* **Bastián Liempi - Especialista Teórico y Fundamentos:**
-    * Responsable del marco teórico, la demostración geométrica de las proyecciones y el cálculo manual de matrices.
-    * **Script:** `ejemplo_manual.py` (Validación matemática paso a paso en consola).
+**Errores críticos a evitar:**
+* *Error fatal:* Copiar y pegar definiciones directamente de internet o IA. La rúbrica penaliza severamente el plagio. Debes explicar el álgebra lineal con tus propias palabras y ejemplos.
+* *Error en presentación:* No saber explicar cómo se pasa de la matriz original a la matriz de covarianza mediante la fórmula: `(X^T * X) / (n - 1)`.
 
-* **Martin Hernandez - Ingeniero de Datos y Contexto:**
-    * Responsable de la investigación, extracción, limpieza y estandarización estadística de las variables.
-    * Generación de la matriz oficial de 48 filas (equipos clasificados) y 6 columnas (métricas de rendimiento).
-    * **Script:** `carga_exploracion.py` (Generación del dataset, Z-score y análisis exploratorio).
+---
 
-* **Martin Lopez - Desarrollador del Algoritmo Core:**
-    * Responsable de la implementación computacional del motor matemático usando `numpy`.
-    * Cálculo de la Matriz de Covarianza, extracción de Autovalores/Autovectores y producto punto para la proyección dimensional.
-    * **Script:** `motor_pca.py` (Motor de reducción de 6D a 2D).
+## 2. Martin Hernandez: Ingeniero de Datos y Contexto
 
-* **Deris Aranquiz - Analista de Varianza y Compilador:**
-    * Responsable de la interpretación de resultados, varianza explicada y compilación del documento LaTeX.
-    * Visualización de los nuevos componentes ortogonales y conclusiones finales.
-    * **Script:** `analisis_varianza.py` (Scree plot y gráfico de dispersión bidimensional).
+**Responsabilidad Principal:** Proveer, estructurar y justificar la matriz de datos hiperdimensional (48 selecciones x 6 métricas) que será el insumo principal del proyecto.
 
-## Estructura de Datos (Matriz de Entrada)
-Se construyó una matriz estandarizada de 48x6 basada en estadísticas reales (Transfermarkt y FIFA). Las variables seleccionadas para el cálculo de jerarquía son:
-1. Puntos FIFA.
-2. Valor de Mercado de la plantilla (Millones de Euros).
-3. Porcentaje de Victorias en eliminatorias.
-4. Goles a Favor (Totales).
-5. Goles en Contra (Totales).
-6. Cantidad de jugadores en ligas Top de Europa.
+**Tareas Específicas:**
+* **Desarrollo del script `carga_exploracion.py`:** Construir el código que contenga los datos oficiales investigados (Puntos FIFA, Valor de Mercado, % Victorias, Goles a Favor, Goles en Contra, Jugadores Ligas Top) para los 48 países clasificados al Mundial 2026.
+* **Estandarización (Z-Score):** Explicar matemática y gráficamente por qué es obligatorio restar la media y dividir por la desviación estándar antes de aplicar PCA (para igualar la escala de "Millones de Euros" con la escala de "Goles").
+* **Exportación:** Asegurar que el código genere el archivo físico `dataset_mundial_2026.csv` limpio y sin texto (solo números) para el siguiente paso.
 
-## Instrucciones de Ejecución
-Para replicar el experimento
+**Errores críticos a evitar:**
+* *Error fatal:* Entregar una matriz con datos de texto (strings) al motor PCA, lo cual rompería los cálculos matriciales.
+* *Error en presentación:* Dudar si el profesor pregunta por el origen de los datos. Debes defender que es un dataset basado en métricas reales y auditadas para evitar ruido estadístico.
+
+---
+
+## 3. Martin Lopez: Desarrollador del Algoritmo Core
+
+**Responsabilidad Principal:** Programar el motor matemático de reducción dimensional utilizando estrictamente operaciones de álgebra lineal pura.
+
+**Tareas Específicas:**
+* **Desarrollo del script `motor_pca.py`:** Este script debe leer el archivo `dataset_mundial_2026.csv`.
+* **Cálculos Matriciales en Numpy:** Debes calcular la matriz de covarianza multiplicando matrices (`X_std.T @ X_std`). Luego, debes extraer los autovalores y autovectores utilizando exclusivamente la función `numpy.linalg.eig`.
+* **Proyección:** Multiplicar la matriz estandarizada original por los 2 autovectores principales para reducir las 6 columnas iniciales a solo 2 nuevas coordenadas (PC1 y PC2). Guardar este resultado en `resultados_pca_2d.csv`.
+
+**Errores críticos a evitar:**
+* *Error fatal:* **Prohibido utilizar la librería `scikit-learn` (sklearn.decomposition.PCA)**. Si usas librerías automáticas, el equipo obtendrá calificación mínima en "Implementación Computacional", ya que el objetivo es demostrar que saben programar el álgebra subyacente.
+* *Error matemático:* Olvidar ordenar los autovalores de mayor a menor. Si no los ordenas, podrías proyectar los datos sobre el eje menos importante, arruinando los resultados.
+
+---
+
+## 4. Deris Aranquiz: Analista de Varianza y Compilador
+
+**Responsabilidad Principal:** Interpretar visualmente los resultados matemáticos, generar los gráficos finales y compilar el documento LaTeX definitivo.
+
+**Tareas Específicas:**
+* **Desarrollo del script `analisis_varianza.py`:** Leer el archivo `resultados_pca_2d.csv` generado por Martin L.
+* **Visualización:** Generar un Gráfico de Dispersión (Scatter Plot) en 2D. El eje X (PC1) representará la "Jerarquía/Probabilidad de ganar el Mundial" y el eje Y (PC2) representará la "Volatilidad de Goles". Cada punto debe ser una selección nacional.
+* **Varianza Explicada (Scree Plot):** Crear un gráfico de barras que demuestre qué porcentaje de la información original de las 6 variables logramos retener al usar solo 2 ejes.
+* **Compilación en LaTeX:** Juntar la teoría de Bastián, la justificación de datos de Martin H., el código de Martin L. y tus gráficos en un único documento coherente, asegurando el formato y la bibliografía.
+
+**Errores críticos a evitar:**
+* *Error fatal:* Mostrar un gráfico sin poder explicar qué significan matemáticamente los ejes. Debes tener claro que los ejes no son variables directas, sino combinaciones lineales de las 6 variables originales.
+* *Error logístico:* No revisar que los códigos de los anexos coincidan exactamente con la explicación del texto. Debes ser el filtro de calidad antes de subir el PDF a la plataforma universitaria el 23 de junio.
