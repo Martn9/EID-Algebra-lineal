@@ -26,32 +26,42 @@ var_exp_pct = [(i / var_total) * 100 for i in autovalores]
 var_acum_pct = np.cumsum(var_exp_pct)
 
 # ==========================================
-# GRÁFICO 1: Dispersión 2D (Scatter Plot)
+# GRÁFICO 1: Scatter Plot 2D (Todos los países en Positivo)
 # ==========================================
-plt.figure(figsize=(10, 6))
+print("Generando Scatter Plot 2D de todos los países...")
 
-# Dibujar todos los puntos de forma sencilla
-plt.scatter(pca_2d["PC1"], pca_2d["PC2"], color='blue', alpha=0.6, edgecolors='black')
+# Creamos un lienzo un poco más grande para que quepan bien los 48 textos
+fig, ax = plt.subplots(figsize=(13, 9))
 
-# Etiquetar solo algunos países clave usando un ciclo simple
+# Líneas de referencia en el centro (coordenada 0,0)
+ax.axhline(0, color='gray', linewidth=0.8, linestyle='--', alpha=0.5)
+ax.axvline(0, color='gray', linewidth=0.8, linestyle='--', alpha=0.5)
+
+# Pasamos el PC1 a positivo multiplicando por -1. El PC2 lo dejamos igual.
+PC1_positivo = pca_2d["PC1"].values * -1
+PC2_original = pca_2d["PC2"].values
+
+# Dibujamos todos los puntos en el mapa
+ax.scatter(PC1_positivo, PC2_original, color='blue', s=50, edgecolors='black', alpha=0.7, zorder=3)
+
+# Ciclo simple para ponerle el nombre a TODOS los 48 países sin excepción
 paises = dataset["Pais"].tolist()
-paises_destacados = ["Argentina", "Francia", "Brasil", "Espana", "Inglaterra", "Japon", "Marruecos", "Curazao"]
-
 for i in range(len(paises)):
-    if paises[i] in paises_destacados:
-        plt.text(pca_2d["PC1"][i] + 0.1, pca_2d["PC2"][i] + 0.1, paises[i], fontsize=9)
+    # Ponemos el texto un poquito desplazado (+0.08) para que no tape el punto azul
+    ax.text(PC1_positivo[i] + 0.08, PC2_original[i] + 0.05, paises[i], fontsize=7, alpha=0.85)
 
-# Líneas del centro y diseño básico
-plt.axhline(0, color='black', linestyle='--', linewidth=0.8)
-plt.axvline(0, color='black', linestyle='--', linewidth=0.8)
-plt.title("PCA - Proyección del Mundial 2026")
-plt.xlabel("PC1 (Jerarquía General)")
-plt.ylabel("PC2 (Volatilidad de Goles)")
-plt.grid(True, linestyle=':')
+# Títulos y nombres de los ejes
+ax.set_title("PCA - Mapa de Proyección de las 48 Selecciones (Mundial 2026)", fontsize=14, fontweight='bold', pad=15)
+ax.set_xlabel("PC1 — Jerarquía General del Equipo (Favoritos a la Derecha)", fontsize=11, labelpad=8)
+ax.set_ylabel("PC2 — Volatilidad Ofensiva/Defensiva (Anomalías de Goles)", fontsize=11, labelpad=8)
+ax.grid(True, linestyle=':', alpha=0.5, zorder=0)
 
-plt.savefig("scatter_pca.png")
+# Guardamos la imagen en alta definición (dpi=300) para que no se pixele al imprimir
+plt.tight_layout()
+plt.savefig("scatter_pca_mundial2026.png", dpi=300, bbox_inches='tight')
 plt.show()
 
+print("[OK] Gráfico Scatter Plot guardado en alta resolución.")
 # ==========================================
 # GRÁFICO 2: Varianza Explicada (Scree Plot)
 # ==========================================
