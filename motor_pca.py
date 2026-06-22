@@ -34,13 +34,18 @@ autovectores = autovectores[:, orden]
 W = autovectores[:, :2]          # (6 x 2)
 proy = X_std @ W                 # (n x 2)
 
-# guardar resultados
+# guardar resultados bidimensionales
 out = pd.DataFrame(proy, columns=["PC1", "PC2"])
 out.to_csv("resultados_pca_2d.csv", index=False)
 
+# NUEVO: Guardar autovalores para que Deris pueda hacer el Scree Plot
+df_autovalores = pd.DataFrame({"Autovalores": autovalores})
+df_autovalores.to_csv("autovalores.csv", index=False)
+
+# Mostrar en consola
 var_total = autovalores.sum()
 var_exp = autovalores[:2] / var_total * 100
 print("Autovalores (ordenados):", np.round(autovalores, 4))
 print(f"Varianza explicada PC1: {var_exp[0]:.2f}%  PC2: {var_exp[1]:.2f}%")
 print(f"Acumulada (PC1+PC2): {var_exp.sum():.2f}%")
-print("resultados_pca_2d.csv", proy.shape)
+print("Archivos generados: resultados_pca_2d.csv y autovalores.csv")

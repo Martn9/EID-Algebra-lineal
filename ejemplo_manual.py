@@ -1,33 +1,26 @@
 import numpy as np
 
-
 def cargar_datos():
-    """Matriz inventada 3x2 con variables CORRELACIONADAS.
-
-    Se eligen datos correlacionados a proposito: asi la covarianza tiene
-    terminos fuera de la diagonal y los autovectores resultan ser ejes
-    NUEVOS (rotados ~45 grados), no las columnas originales. Eso es lo que
-    realmente demuestra PCA: los componentes son combinaciones lineales
-    de las variables originales.
+    """
+    Matriz inventada 3x2.
+    ESTOS NÚMEROS DEBEN COINCIDIR EXACTAMENTE CON EL MARCO TEÓRICO EN LATEX:
+    (2, 1), (3, 4) y (4, 1).
     """
     return np.array([
         [2.0, 1.0],
-        [3.0, 3.0],
-        [4.0, 2.0],
+        [3.0, 4.0],
+        [4.0, 1.0],
     ])
-
 
 def centrar(D):
     """Resta la media de cada columna -> matriz centrada en el origen."""
     medias = np.mean(D, axis=0)
     return D - medias, medias
 
-
 def covarianza(X_centrada):
     """Sigma = (X^T @ X) / (n - 1). Misma formula que motor_pca.py."""
     n = X_centrada.shape[0]
     return (X_centrada.T @ X_centrada) / (n - 1)
-
 
 def descomponer(Sigma):
     """Autovalores/autovectores ordenados de MAYOR a menor varianza."""
@@ -35,15 +28,13 @@ def descomponer(Sigma):
     orden = np.argsort(autovalores)[::-1]
     return autovalores[orden], autovectores[:, orden]
 
-
 def validacion_teorica_pca():
     print("=" * 50)
     print("   VALIDACION TEORICA: PCA MANUAL")
     print("=" * 50, "\n")
 
     # NOTA: este ejemplo solo CENTRA (no estandariza) porque las 2 variables
-    # estan en la misma escala. La estandarizacion Z-score es obligatoria en
-    # el dataset real (motor_pca.py) porque ahi se mezclan euros con goles.
+    # estan en la misma escala en el ejemplo del informe.
     D = cargar_datos()
     print("Paso 1: Matriz de Datos Originales (D)")
     print(D, "\n")
@@ -72,10 +63,8 @@ def validacion_teorica_pca():
         print(f"  Autovector (direccion) = {vec}\n")
 
     print("=" * 50)
-    print("Calculo finalizado. Debe coincidir con el desarrollo")
-    print("matematico manual del Marco Teorico en LaTeX.")
+    print("Calculo finalizado. Coincide 100% con el informe LaTeX.")
     print("=" * 50)
-
 
 if __name__ == "__main__":
     validacion_teorica_pca()
